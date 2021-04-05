@@ -17,7 +17,7 @@ typedef struct {
 int main(){
 //Datos iniciales
 	int num_proc, time_ejec;
-	printf("Ingrese la cantidad de tiempo que tendra un proceso en ejecucion en laPU (Seg)\n");
+	printf("Ingrese la cantidad de tiempo que tendra un proceso en ejecucion en la CPU (Seg)\n");
 	printf("Quantum= ");
 	fflush(stdin);
 	scanf("%d",&time_ejec);
