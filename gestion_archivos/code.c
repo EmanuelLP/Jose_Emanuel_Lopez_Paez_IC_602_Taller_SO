@@ -50,7 +50,32 @@ FILE *abrir_Archivo_lectura_escritura(char *nombre_arch){
 	return ptrArchivo;
 }
 
-
+// Implementación del método de la burbuja en C, para arreglos de cadenas
+void burbuja(char arreglo[][MAXIMA_LONGITUD_CADENA], int longitud)
+{
+    // Útil para hacer intercambio de cadenas
+    char temporal[MAXIMA_LONGITUD_CADENA];
+    int x, indiceActual;
+    for (x = 0; x < longitud; x++)
+    {
+        for (indiceActual = 0; indiceActual < longitud - 1;
+             indiceActual++)
+        {
+            int indiceSiguienteElemento = indiceActual + 1;
+            // Si la cadena es mayor que la siguiente (alfabeticamente) entonces intercambiamos
+            if (strcmp(arreglo[indiceActual], arreglo[indiceSiguienteElemento]) > 0)
+            {
+                // Movemos la cadena actual a la temporal
+                memcpy(temporal, arreglo[indiceActual], MAXIMA_LONGITUD_CADENA);
+                // Movemos al actual el siguiente elemento
+                memcpy(arreglo[indiceActual], arreglo[indiceSiguienteElemento], MAXIMA_LONGITUD_CADENA);
+                // Y en el siguiente elemento, lo que había antes en el actual pero ahora está en temporal
+                memcpy(arreglo[indiceSiguienteElemento], temporal, MAXIMA_LONGITUD_CADENA);
+            }
+        }
+    }
+    // No hay necesidad de devolver nada, pues modificamos al arreglo de manera interna
+}
 
 
 
@@ -138,6 +163,25 @@ int main(int argc, char const *argv[]){
 			
 	cerrar_archivo(ptrCf, nom_archivo);
 	
+	
+	
+	int longitud = sizeof(texto) / sizeof(texto[0]);
+ 	// Imprimimos el arreglo antes de ordenarlo, solo para ilustrar
+ 	printf("---Imprimiendo arreglo sin ordenar---\n");
+ 	int i;
+ 	for (i = 0; i < longitud; i++){
+       	printf("%s\n", texto[i]);
+	}	
+	    
+	// Lo ordenamos
+	burbuja(texto, longitud);
+	// Volvemos a imprimir
+	printf("---Imprimiendo arreglo ordenado---\n");
+	for (i = 0; i < longitud; i++){
+        	printf("%s\n", texto[i]);
+    	} 
+	    
+    
 	
 return 0;
 }
