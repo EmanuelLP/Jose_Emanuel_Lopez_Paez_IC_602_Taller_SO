@@ -77,14 +77,44 @@ void burbuja(char arreglo[][MAXIMA_LONGITUD_CADENA], int longitud)
     // No hay necesidad de devolver nada, pues modificamos al arreglo de manera interna
 }
 
+int crear_archivo(char *nombre_arch){
+	int creado = 0;
+	FILE *ptrArchivo;
+	ptrArchivo = fopen(nombre_arch, "w");
+	if( ptrArchivo == NULL ){
+		// con w crea un archivo para escritura. Si el archivo ya existe, descarta el contenido actual.
+		printf("----> El archivo -> %s <- no pudo crearse (abrir; uso de w).\n", nombre_arch);
+	}	
+	else{
+		creado = 1;
+		printf("----> Archivo -> %s <- Creado (abierto; uso de w).\n", nombre_arch);
+		cerrar_archivo(ptrArchivo, nombre_arch);
+	}
+	return creado;
+}
 
+
+FILE *abrir_Archivo_escritura(char *nombre_arch){
+	FILE *ptrArchivo;
+	ptrArchivo = fopen(nombre_arch, "w+");
+	if( ptrArchivo == NULL ){
+		// con r+ Abre un archivo para actualización (lectura y escritura).
+		printf("---> El archivo -> %s <- NO pudo abrirse (uso de w+).\n", nombre_arch);
+	}	
+	else{
+		printf("---> Archivo -> %s <- Abierto (uso de w+).\n", nombre_arch);
+	}
+	return ptrArchivo;	
+}
 
 int main(int argc, char const *argv[]){
 	// FILE es una estructura
 	/*  ptrCF apuntado al archivo
 	Open apuntador que si no puede abrir el programa se cierra*/
 	FILE *ptrCf = NULL;
+	FILE *ptrCd = NULL;
 	char nom_archivo[TAM_NOMBRE];
+	char nom_archivod[TAM_NOMBRE];
 	int existe_arch = 0;
 	char cadena[TAM_LECTURA];
 	char cadena1[TAM_LECTURA];
@@ -148,12 +178,12 @@ int main(int argc, char const *argv[]){
 	}				
 	cerrar_archivo(ptrCf, nom_archivo);
 	
-
+	//GUARADAR PALABRAS EN ARREGLO
 	int contador=0;
 	char texto[palabras][MAXIMA_LONGITUD_CADENA];
 	char buffer[MAXIMA_LONGITUD_CADENA];
+	char pd[MAXIMA_LONGITUD_CADENA];
 	//LLENAR VECTOR DE PALABRAS
-	
 	ptrCf = abrir_Archivo_lectura_escritura(nom_archivo);
 	while(fgets(buffer,MAXIMA_LONGITUD_CADENA,ptrCf)){
 		strtok(buffer,"\n");
@@ -161,27 +191,81 @@ int main(int argc, char const *argv[]){
 		contador++;
 	}
 			
+	
+	
+	
+	printf("\tIntroduzca el Nombre del Archivo Destino: ");
+	gets(nom_archivod);
+	existe_arch = existe_archivo(nom_archivod);
+	if(existe_arch){
+		printf("---------------------------------------------------------------\n");
+		printf("\tEl archivo -> %s <- YA EXISTE.\n", nom_archivod);
+		printf("---------------------------------------------------------------\n");
+	}
+	else{
+		printf("---------------------------------------------------------------\n");
+		printf("\tEl archivo -> %s <- NO EXISTE.\n", nom_archivod);
+		printf("---------------------------------------------------------------\n");	
+	}		
+	if(crear_archivo(nom_archivod)){
+		printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+		printf("\tEl archivo -> %s <- Fue creado/modificado EXITOSAMENTE.\n", nom_archivod);	
+		printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	}
+	else{
+		printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+		printf("\tEl archivo -> %s <- NO pudo crearse.\n", nom_archivod);			
+		printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	}
+	
+	//Abrir FILE Destino
+	ptrCd=abrir_Archivo_escritura(nom_archivod);
+	//Cerrar Dile Entrada
 	cerrar_archivo(ptrCf, nom_archivo);
-	
-	
-	
+//	cerrar_archivo(ptrCd, nom_archivod);
+	//Longitud del arreglo
 	int longitud = sizeof(texto) / sizeof(texto[0]);
+
  	// Imprimimos el arreglo antes de ordenarlo, solo para ilustrar
- 	printf("---Imprimiendo arreglo sin ordenar---\n");
+ 	/*printf("---Imprimiendo arreglo sin ordenar---\n");
  	int i;
  	for (i = 0; i < longitud; i++){
        	printf("%s\n", texto[i]);
-	}	
+	}*/
+	
+	int comparar(const void *a, const void *b){
+		const char *cp1 = a, *cp2 = b;
+		for (; toupper(*cp1) == toupper(*cp2); cp1++, cp2++)
+	        if (*cp1 == '\0')
+        return 0;
+	return ((toupper(*cp1) < toupper(*cp2)) ? -1 : +1);
+	} 
+	
+	int i=0;
+//	int s=palabras-contador;
+	qsort((void*)texto,longitud,sizeof(texto[0]),comparar);    
+        for (i =palabras+1; i < longitud-1; i++){
+		printf("%s\n", texto[i]);
+		fputs(texto[i],ptrCd);
+	        fputs("\n",ptrCd);
+	    }	
 	    
+    cerrar_archivo(ptrCd, nom_archivod);
+	    
+	    
+	 /*   
 	// Lo ordenamos
 	burbuja(texto, longitud);
 	// Volvemos a imprimir
 	printf("---Imprimiendo arreglo ordenado---\n");
 	for (i = 0; i < longitud; i++){
         	printf("%s\n", texto[i]);
-    	} 
+    	} */
+	
+	
 	    
-    
+	    
+	     
 	
 return 0;
 }
