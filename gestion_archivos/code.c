@@ -37,7 +37,18 @@ int existe_archivo(char *nombre_arch){
 	return existe;
 }
 
-
+FILE *abrir_Archivo_lectura_escritura(char *nombre_arch){
+	FILE *ptrArchivo;
+	ptrArchivo = fopen(nombre_arch, "r+");
+	if( ptrArchivo == NULL ){
+		// con r+ Abre un archivo para actualización (lectura y escritura).
+		printf("---> El archivo -> %s <- NO pudo abrirse (uso de r+).\n", nombre_arch);
+	}	
+	else{
+		printf("---> Archivo -> %s <- Abierto (uso de r+).\n", nombre_arch);
+	}
+	return ptrArchivo;
+}
 
 
 
@@ -90,7 +101,7 @@ int main(int argc, char const *argv[]){
 		printf("---------------------------------------------------------------------------\n");
 		cerrar_archivo(ptrCf, nom_archivo);
 	}
-	//SEPARAR PALABRAS
+	//NUMERO PALABRAS PALABRAS
 	printf("****************************************************************\n");
 	printf("\tPalabras separadas\n");			
 	printf("****************************************************************\n");
@@ -102,7 +113,7 @@ int main(int argc, char const *argv[]){
 		/*strtok=token particionar la cadena por separadores*/
 		puntero=strtok(cadena1,separadores);
 		palabras++;
-		strcpy(cadena1,ptr);
+		strcpy(cadena1,puntero);
 		printf("%s\n",cadena1);
 		while((puntero=strtok(NULL,separadores))!=NULL){
 			palabras++;
@@ -113,14 +124,16 @@ int main(int argc, char const *argv[]){
 	cerrar_archivo(ptrCf, nom_archivo);
 	
 
-	int contador=0:
+	int contador=0;
 	char texto[palabras][MAXIMA_LONGITUD_CADENA];
-	char buffer[MAXIMA_LONGITUD_CADENA],
+	char buffer[MAXIMA_LONGITUD_CADENA];
 	//LLENAR VECTOR DE PALABRAS
-	ptrCf = abrir_Archivo_solo_Lectura(nom_archivo);
-	while(fgets(buffer,MAXIMA_LONGITUD_CADENA,nom_archivo){
-		strtok
 	
+	ptrCf = abrir_Archivo_lectura_escritura(nom_archivo);
+	while(fgets(buffer,MAXIMA_LONGITUD_CADENA,ptrCf)){
+		strtok(buffer,"\n");
+		memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA);
+		contador++;
 	}
 			
 	cerrar_archivo(ptrCf, nom_archivo);
