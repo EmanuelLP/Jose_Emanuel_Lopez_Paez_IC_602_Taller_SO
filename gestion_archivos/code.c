@@ -37,6 +37,14 @@ int existe_archivo(char *nombre_arch){
 	return existe;
 }
 
+int comparar(const void *a, const void *b){
+		const char *cp1 = a, *cp2 = b;
+		for (; toupper(*cp1) == toupper(*cp2); cp1++, cp2++)
+	        if (*cp1 == '\0')
+        return 0;
+	return ((toupper(*cp1) < toupper(*cp2)) ? -1 : +1);
+	} 
+
 FILE *abrir_Archivo_lectura_escritura(char *nombre_arch){
 	FILE *ptrArchivo;
 	ptrArchivo = fopen(nombre_arch, "r+");
@@ -118,6 +126,7 @@ int main(int argc, char const *argv[]){
 	int existe_arch = 0;
 	char cadena[TAM_LECTURA];
 	char cadena1[TAM_LECTURA];
+	char cadena2[TAM_LECTURA];
 	char separadores[]=" \n\t";
 	char *puntero;
 	int palabras=0;
@@ -191,9 +200,7 @@ int main(int argc, char const *argv[]){
 		contador++;
 	}
 			
-	
-	
-	
+	//LEER ARCHIVO SALIDA		
 	printf("\tIntroduzca el Nombre del Archivo Destino: ");
 	gets(nom_archivod);
 	existe_arch = existe_archivo(nom_archivod);
@@ -222,50 +229,46 @@ int main(int argc, char const *argv[]){
 	ptrCd=abrir_Archivo_escritura(nom_archivod);
 	//Cerrar Dile Entrada
 	cerrar_archivo(ptrCf, nom_archivo);
-//	cerrar_archivo(ptrCd, nom_archivod);
 	//Longitud del arreglo
 	int longitud = sizeof(texto) / sizeof(texto[0]);
-
- 	// Imprimimos el arreglo antes de ordenarlo, solo para ilustrar
- 	/*printf("---Imprimiendo arreglo sin ordenar---\n");
+	
+ 	/*// Imprimimos el arreglo antes de ordenarlo, solo para ilustrar
+ 	printf("---Imprimiendo arreglo sin ordenar---\n");*/
  	int i;
- 	for (i = 0; i < longitud; i++){
+ 	/*for (i = 0; i < longitud; i++){
        	printf("%s\n", texto[i]);
 	}*/
-	
-	int comparar(const void *a, const void *b){
-		const char *cp1 = a, *cp2 = b;
-		for (; toupper(*cp1) == toupper(*cp2); cp1++, cp2++)
-	        if (*cp1 == '\0')
-        return 0;
-	return ((toupper(*cp1) < toupper(*cp2)) ? -1 : +1);
-	} 
-	
-	int i=0;
-//	int s=palabras-contador;
+	/*printf("\t\t\t%d\n",longitud);
+	printf("\t\t\t%d\n",palabras);
+	longuitud y palabras es el mismo numero*/
+	//Metodo de ordenamiento 
 	qsort((void*)texto,longitud,sizeof(texto[0]),comparar);    
-        for (i =palabras+1; i < longitud-1; i++){
+        for (i =0; i < longitud; i++){
 		printf("%s\n", texto[i]);
 		fputs(texto[i],ptrCd);
 	        fputs("\n",ptrCd);
 	    }	
-	    
-    cerrar_archivo(ptrCd, nom_archivod);
-	    
-	    
-	 /*   
+	//Cerrar archivo de salida
+	cerrar_archivo(ptrCd, nom_archivod);	    
+	//Abrir archivo para solo lectura de salida
+	ptrCd = abrir_Archivo_solo_Lectura(nom_archivod); 
+	while(!feof(ptrCd)){
+		fgets(cadena2,TAM_LECTURA,ptrCd);
+		printf("%s",cadena2);
+	}	
+	cerrar_archivo(ptrCd, nom_archivod);  
+    
 	// Lo ordenamos
-	burbuja(texto, longitud);
+	//burbuja(texto, longitud);
 	// Volvemos a imprimir
-	printf("---Imprimiendo arreglo ordenado---\n");
-	for (i = 0; i < longitud; i++){
-        	printf("%s\n", texto[i]);
-    	} */
+	//printf("---Imprimiendo arreglo ordenado---\n");
+	//for (i = 0; i < longitud; i++){
+        //	printf("%s\n", texto[i]);
+    	//} 
 	
-	
-	    
-	    
-	     
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	printf("\tFin del programa");			
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	
 return 0;
 }
