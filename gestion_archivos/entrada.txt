@@ -1,2 +1,2 @@
-hola este es un texto
-de prueba
+Texto para ordenamiento con la gestion de archivos
+palabras de prueba

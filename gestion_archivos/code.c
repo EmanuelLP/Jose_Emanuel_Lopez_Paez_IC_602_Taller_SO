@@ -184,7 +184,7 @@ int main(int argc, char const *argv[]){
 			strcpy(cadena1,puntero);
 			printf("%s\n",cadena1);
 		}	
-	}				
+	}			
 	cerrar_archivo(ptrCf, nom_archivo);
 	
 	//GUARADAR PALABRAS EN ARREGLO
@@ -194,12 +194,32 @@ int main(int argc, char const *argv[]){
 	char pd[MAXIMA_LONGITUD_CADENA];
 	//LLENAR VECTOR DE PALABRAS
 	ptrCf = abrir_Archivo_lectura_escritura(nom_archivo);
-	while(fgets(buffer,MAXIMA_LONGITUD_CADENA,ptrCf)){
+	/*while(fgets(buffer,MAXIMA_LONGITUD_CADENA,ptrCf)){
 		strtok(buffer,"\n");
 		memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA);
 		contador++;
 	}
-			
+*/	
+	while(!feof(ptrCf)){
+		fgets(cadena1,TAM_LECTURA,ptrCf);
+		/*strtok=token particionar la cadena por separadores*/
+		puntero=strtok(cadena1,separadores);
+		strcpy(cadena1,puntero);
+		printf("%s\n",cadena1);
+		strcpy(memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA),cadena1);
+		//memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA);
+		while((puntero=strtok(NULL,separadores))!=NULL){
+			//palabras++;
+			strcpy(cadena1,puntero);
+			printf("%s\n",cadena1);
+			contador++;
+			strcpy(memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA),cadena1);
+			//memcpy(texto[contador],buffer,MAXIMA_LONGITUD_CADENA);
+		}	
+	}		
+
+
+		
 	//LEER ARCHIVO SALIDA		
 	printf("\tIntroduzca el Nombre del Archivo Destino: ");
 	gets(nom_archivod);
