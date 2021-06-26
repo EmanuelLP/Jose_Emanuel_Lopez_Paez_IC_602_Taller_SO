@@ -209,7 +209,7 @@ int main(){
                                        	char nuevoSexo;                                        
                                        	printf("Introduce el nuevo Sexo: ");
                                        	fflush(stdin);
-						scanf("%c",&nuevoSexo);
+						scanf("%s",&nuevoSexo);
 						cambiarSexoCliente(banco,pais,cliente,nuevoSexo);
  	                                       printf("-----------------------------------------------------------------\n");
                                         	printCliente(banco, pais,cliente);
